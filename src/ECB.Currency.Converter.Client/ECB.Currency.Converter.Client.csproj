@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PackageId>ECB.Currency.Converter</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>Javier Angosto Barjollo</Authors>
+		<Company>Independent</Company>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<Description>
+			Provides a simple, reliable, and dependency-free currency conversion utility for .NET applications using official daily exchange rates published by the European Central Bank (ECB). Supports conversions between 30+ currencies with automatic caching and clean API design.
+		</Description>
+		<PackageTags>currency;conversion;exchange;rate;ecb;money;finance;bce;euro;ddd;result</PackageTags>
+		<RepositoryUrl>https://github.com/JavierAngostoDev/ECB.Currency.Converter</RepositoryUrl>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReleaseNotes>
+			**Initial Release (v1.0.0)** 🎉
+
+			This is the first public release of the EcbCurrencyConverter library!
+
+			Provides a simple and reliable way to perform currency conversions and retrieve daily exchange rates using the official feed from the European Central Bank (ECB).
+
+			**Key Features:**
+			* Fetches daily reference rates directly from the European Central Bank (ECB).
+			* Supports conversion between any currencies available in the ECB feed (calculates cross-rates automatically, e.g., USD to JPY).
+			* Provides methods to get exchange rates (`GetExchangeRateAsync`) and convert amounts (`ConvertAsync`) via the `EcbConverterClient` class.
+			* Robust error handling using the Result pattern (`Result&lt;T&gt;`) - no unexpected exceptions for common issues like network errors, parsing errors, or invalid input.
+			* Built-in caching (4-hour default) to minimize requests to the ECB feed and improve performance.
+			* Asynchronous API (`async/await`).
+			* Targets .NET Standard 2.0 for broad compatibility across .NET Framework and modern .NET versions.
+			* Uses Value Objects (`Currency`, `Money`, `ExchangeRate`) for improved type safety and domain representation.
+			* Lightweight with no external runtime dependencies.
+
+			See the project README for detailed usage examples.
+		</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ECB.Currency.Converter.Core\ECB.Currency.Converter.Core.csproj" />
+		<ProjectReference Include="..\ECB.Currency.Converter.Infrastructure\ECB.Currency.Converter.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="README.md" />
+		<None Include="..\..\images\icon.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+</Project>
