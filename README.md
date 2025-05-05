@@ -152,6 +152,6 @@ Supported currencies (as published daily by the ECB):
 
 ## 🙌 Author
 
-Created by [YourNameHere].
+Created by [Javier Angosto Barjollo](https://github.com/JavierAngostoDev)
 
 ---
