@@ -8,5 +8,6 @@
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="ECB.Currency.Converter.Client" />
+		<InternalsVisibleTo Include="ECB.Currency.Converter.Tests" />
 	</ItemGroup>
 </Project>

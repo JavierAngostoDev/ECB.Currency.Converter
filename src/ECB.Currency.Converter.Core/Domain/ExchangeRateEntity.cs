@@ -23,7 +23,6 @@ namespace ECB.Currency.Converter.Core.Domain
         public static Result<ExchangeRateEntity> Create(CurrencyEntity baseCurrency, CurrencyEntity quoteCurrency, decimal rate, DateTimeOffset timestamp)
         {
             if (rate <= 0) return Result<ExchangeRateEntity>.Failure(NonPositiveRateError);
-            if (baseCurrency == quoteCurrency) return Result<ExchangeRateEntity>.Failure(SameCurrencyError);
 
             return Result<ExchangeRateEntity>.Success(new ExchangeRateEntity(baseCurrency, quoteCurrency, rate, timestamp));
         }
