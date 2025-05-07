@@ -203,20 +203,43 @@ namespace ECB.Currency.Converter.Tests.Features.GetExchangeRate
                 ExchangeRateEntity.Create(Eur, Gbp, 0.85m, rateTimestamp).Value
             ];
 
-                _mockRateProvider.Setup(p => p.GetLatestRatesAsync())
-                                 .ReturnsAsync(Result<IEnumerable<ExchangeRateEntity>>.Success(rates));
+            _mockRateProvider.Setup(p => p.GetLatestRatesAsync())
+                                .ReturnsAsync(Result<IEnumerable<ExchangeRateEntity>>.Success(rates));
 
-                // Act
-                Result<ExchangeRateEntity> result = await _handler.Handle(query);
+            // Act
+            Result<ExchangeRateEntity> result = await _handler.Handle(query);
 
-                // Assert
-                result.IsSuccess.Should().BeFalse();
-                result.Error.Should().NotBeNull();
-                result.Error.Code.Should().Be("GetExchangeRate.InvalidStoredRate");
-                result.Error.Message.Should().Contain(Usd.Code);
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.Error.Should().NotBeNull();
+            result.Error.Code.Should().Be("GetExchangeRate.InvalidStoredRate");
+            result.Error.Message.Should().Contain(Usd.Code);
 
-                _mockRateProvider.Verify(p => p.GetLatestRatesAsync(), Times.Once);
-            }
-
+            _mockRateProvider.Verify(p => p.GetLatestRatesAsync(), Times.Once);
         }
+
+        [Fact]
+        public async Task Handle_WhenProviderReturnsEmptyRatesList_ReturnsRateNotFoundError()
+        {
+            // Arrange
+            GetExchangeRateQuery query = new GetExchangeRateQuery(Usd, Gbp);
+            List<ExchangeRateEntity> emptyRates = [];
+
+            _mockRateProvider.Setup(p => p.GetLatestRatesAsync())
+                             .ReturnsAsync(Result<IEnumerable<ExchangeRateEntity>>.Success(emptyRates));
+
+            // Act
+            DateTimeOffset beforeExecution = DateTimeOffset.UtcNow;
+            Result<ExchangeRateEntity> result = await _handler.Handle(query);
+            DateTimeOffset afterExecution = DateTimeOffset.UtcNow;
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.Error.Should().NotBeNull();
+            result.Error.Code.Should().Be(GetExchangeRateQueryHandler.RateNotFound.Code);
+            result.Error.Message.Should().Contain(Usd.Code);
+        }
+
+
+    }
 }
