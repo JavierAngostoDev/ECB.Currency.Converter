@@ -45,9 +45,6 @@ namespace ECB.Currency.Converter.Core.Features.GetExchangeRate
             decimal fromRateVsEur = fromRateResult.Value;
             decimal toRateVsEur = toRateResult.Value;
 
-            if (fromRateVsEur == 0)
-                return Result<ExchangeRateEntity>.Failure(Error.Create("GetExchangeRate.ZeroRate", $"Rate for base currency '{query.FromCurrency}' is zero."));
-
             decimal crossRate = toRateVsEur / fromRateVsEur;
 
             return ExchangeRateEntity.Create(query.FromCurrency, query.ToCurrency, crossRate, rateTimestamp);

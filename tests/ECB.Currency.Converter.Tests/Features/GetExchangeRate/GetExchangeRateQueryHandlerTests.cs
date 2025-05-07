@@ -189,5 +189,34 @@ namespace ECB.Currency.Converter.Tests.Features.GetExchangeRate
 
             _mockRateProvider.Verify(p => p.GetLatestRatesAsync(), Times.Once);
         }
-    }
+
+        [Fact]
+        public async Task Handle_WhenFromCurrencyRateIsZero_ReturnsZeroRateError()
+        {
+            // Arrange
+            GetExchangeRateQuery query = new(Usd, Gbp);
+            DateTimeOffset rateTimestamp = DateTimeOffset.UtcNow;
+
+            List<ExchangeRateEntity> rates =
+            [
+                ExchangeRateEntity.Create(Eur, Usd, 0.0m, rateTimestamp).Value,
+                ExchangeRateEntity.Create(Eur, Gbp, 0.85m, rateTimestamp).Value
+            ];
+
+                _mockRateProvider.Setup(p => p.GetLatestRatesAsync())
+                                 .ReturnsAsync(Result<IEnumerable<ExchangeRateEntity>>.Success(rates));
+
+                // Act
+                Result<ExchangeRateEntity> result = await _handler.Handle(query);
+
+                // Assert
+                result.IsSuccess.Should().BeFalse();
+                result.Error.Should().NotBeNull();
+                result.Error.Code.Should().Be("GetExchangeRate.InvalidStoredRate");
+                result.Error.Message.Should().Contain(Usd.Code);
+
+                _mockRateProvider.Verify(p => p.GetLatestRatesAsync(), Times.Once);
+            }
+
+        }
 }
