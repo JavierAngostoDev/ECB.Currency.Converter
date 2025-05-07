@@ -1,6 +1,6 @@
 ﻿# ECB.Currency.Converter 💱
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![codecov](https://codecov.io/gh/JavierAngostoDev/ECB.Currency.Converter/graph/badge.svg?token=C98ZKS3G2R)](https://codecov.io/gh/JavierAngostoDev/ECB.Currency.Converter)
+[![NuGet version](https://img.shields.io/nuget/v/ECB.Currency.Converter.svg?style=flat-square)](https://www.nuget.org/packages/ECB.Currency.Converter/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![codecov](https://codecov.io/gh/JavierAngostoDev/ECB.Currency.Converter/graph/badge.svg?token=C98ZKS3G2R)](https://codecov.io/gh/JavierAngostoDev/ECB.Currency.Converter)
 
 **ECB.Currency.Converter** is a lightweight, reliable, and easy-to-use library for converting currencies using the official daily exchange rates published by the European Central Bank (ECB). Ideal for .NET applications that need to handle currencies without relying on paid services or API keys.
 
@@ -51,41 +51,40 @@ Install-Package ECB.Currency.Converter
 ### Convert amount between currencies
 
 ```csharp
-var client = new EcbConverterClient();
+EcbConverterClient client = new EcbConverterClient();
 
-var result = await client.ConvertAsync("USD", "GBP", 100m);
+Result<MoneyEntity> result = await client.ConvertAsync("USD", "GBP", 100m);
 
 if (result.IsSuccess)
-{
-    Console.WriteLine($"Result: {result.Value}");
-}
+    Console.WriteLine($"Result: {result.Value.Amount} {result.Value.Currency}");
 else
-{
-    Console.WriteLine($"Error: {result.Error}");
-}
+    Console.WriteLine($"Error: {result.Error.Code} - {result.Error.Message}");
 ```
 
 ### Get exchange rate
 
 ```csharp
-var client = new EcbConverterClient();
+EcbConverterClient client = new EcbConverterClient();
 
-var rateResult = await client.GetExchangeRateAsync("USD", "EUR");
+Result<ExchangeRateEntity> rateResult = await client.GetExchangeRateAsync("USD", "EUR");
 
 if (rateResult.IsSuccess)
-{
-    Console.WriteLine($"Rate: {rateResult.Value.Rate} (Date: {rateResult.Value.Date})");
-}
+    Console.WriteLine($"Rate: {rateResult.Value.Rate} (Date: {rateResult.Value.Timestamp:yyyy-MM-dd})");
+else
+    Console.WriteLine($"Error: {rateResult.Error.Code} - {rateResult.Error.Message}");
 ```
 
 ### Get last update timestamp
 
 ```csharp
-var client = new EcbConverterClient();
+EcbConverterClient client = new EcbConverterClient();
 
-var timestamp = client.GetLastRateUpdateTimestamp();
+DateTimeOffset? timestamp = client.GetLastRateUpdateTimestamp();
 
-Console.WriteLine($"Last update: {timestamp}");
+if (timestamp.HasValue)
+    Console.WriteLine($"Last update: {timestamp.Value:yyyy-MM-dd HH:mm:ss}");
+else
+    Console.WriteLine("Last update: unknown");
 ```
 
 ---
@@ -96,7 +95,7 @@ You can use your own implementation of `IExchangeRateProvider`:
 
 ```csharp
 IExchangeRateProvider myProvider = new EcbRateProvider(new HttpClient());
-var client = new EcbConverterClient(myProvider);
+EcbConverterClient client = new EcbConverterClient(myProvider);
 ```
 
 ---
