@@ -1,5 +1,4 @@
 ﻿using ECB.Currency.Converter.Client.Core.Domain;
-using ECB.Currency.Converter.Client.Core.Domain;
 
 namespace ECB.Currency.Converter.Client.Core.Features.ConvertAmount;
 
