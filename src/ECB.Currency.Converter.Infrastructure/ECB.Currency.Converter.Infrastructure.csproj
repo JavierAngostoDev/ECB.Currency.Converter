@@ -7,10 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\ECB.Currency.Converter.Core\ECB.Currency.Converter.Core.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<InternalsVisibleTo Include="ECB.Currency.Converter.Client" />
 		<InternalsVisibleTo Include="ECB.Currency.Converter.Tests" />
 	</ItemGroup>

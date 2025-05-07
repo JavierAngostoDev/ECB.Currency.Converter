@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ECB.Currency.Converter.Core\ECB.Currency.Converter.Core.csproj" />
+    <ProjectReference Include="..\..\src\ECB.Currency.Converter.Client\ECB.Currency.Converter.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>

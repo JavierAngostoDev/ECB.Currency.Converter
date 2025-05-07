@@ -1,9 +1,9 @@
-﻿using ECB.Currency.Converter.Core.Common;
-using ECB.Currency.Converter.Core.Domain;
-using ECB.Currency.Converter.Core.Features.ConvertAmount;
-using ECB.Currency.Converter.Core.Features.GetExchangeRate;
-using ECB.Currency.Converter.Core.Interfaces;
-using ECB.Currency.Converter.Infrastructure.Providers;
+﻿using ECB.Currency.Converter.Client.Core.Common;
+using ECB.Currency.Converter.Client.Core.Domain;
+using ECB.Currency.Converter.Client.Core.Features.ConvertAmount;
+using ECB.Currency.Converter.Client.Core.Features.GetExchangeRate;
+using ECB.Currency.Converter.Client.Core.Interfaces;
+using ECB.Currency.Converter.Client.Infrastructure.Providers;
 
 namespace ECB.Currency.Converter.Client
 {

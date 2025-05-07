@@ -1,7 +1,7 @@
-﻿using ECB.Currency.Converter.Core.Common;
-using ECB.Currency.Converter.Core.Domain;
-using ECB.Currency.Converter.Core.Features.ConvertAmount;
-using ECB.Currency.Converter.Core.Interfaces;
+﻿using ECB.Currency.Converter.Client.Core.Common;
+using ECB.Currency.Converter.Client.Core.Domain;
+using ECB.Currency.Converter.Client.Core.Features.ConvertAmount;
+using ECB.Currency.Converter.Client.Core.Interfaces;
 using FluentAssertions;
 using Moq;
 

@@ -1,4 +1,4 @@
-﻿using ECB.Currency.Converter.Core.Common;
+﻿using ECB.Currency.Converter.Client.Core.Common;
 using FluentAssertions;
 
 namespace ECB.Currency.Converter.Tests.Common

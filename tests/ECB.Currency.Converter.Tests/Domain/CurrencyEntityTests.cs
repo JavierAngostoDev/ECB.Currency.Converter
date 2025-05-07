@@ -1,5 +1,5 @@
-﻿using ECB.Currency.Converter.Core.Common;
-using ECB.Currency.Converter.Core.Domain;
+﻿using ECB.Currency.Converter.Client.Core.Common;
+using ECB.Currency.Converter.Client.Core.Domain;
 using FluentAssertions;
 
 namespace ECB.Currency.Converter.Tests.Domain
