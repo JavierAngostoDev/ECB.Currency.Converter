@@ -25,7 +25,7 @@ namespace ECB.Currency.Converter.Core.Domain
             return Result<ExchangeRateEntity>.Success(new ExchangeRateEntity(baseCurrency, quoteCurrency, rate, timestamp));
         }
 
-        public override string ToString() => $"1 {BaseCurrency} = {Rate} {QuoteCurrency} @ {Timestamp:O}";
+        public override string ToString() => $"1 {BaseCurrency} = {Rate.ToString(System.Globalization.CultureInfo.InvariantCulture)} {QuoteCurrency} @ {Timestamp:O}";
 
         public Result<ExchangeRateEntity> Invert()
         {

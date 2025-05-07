@@ -1,4 +1,5 @@
-﻿using ECB.Currency.Converter.Core.Common;
+﻿using System.Globalization;
+using ECB.Currency.Converter.Core.Common;
 
 namespace ECB.Currency.Converter.Core.Domain
 {
@@ -14,7 +15,7 @@ namespace ECB.Currency.Converter.Core.Domain
         }
 
         public static Result<MoneyEntity> Create(decimal amount, CurrencyEntity currency) => Result<MoneyEntity>.Success(new MoneyEntity(amount, currency));
-        public override string ToString() => $"{Amount:F2} {Currency}";
+        public override string ToString() => $"{Amount.ToString("F2", CultureInfo.InvariantCulture)} {Currency}";
         public static Result<MoneyEntity> Add(MoneyEntity a, MoneyEntity b)
         {
             if (a.Currency != b.Currency)
