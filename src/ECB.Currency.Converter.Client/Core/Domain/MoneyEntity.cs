@@ -10,7 +10,7 @@ namespace ECB.Currency.Converter.Client.Core.Domain
 
         public MoneyEntity(decimal amount, CurrencyEntity currency)
         {
-            Amount = amount;
+            Amount = Math.Round(amount, 2, MidpointRounding.AwayFromZero);
             Currency = currency;
         }
 

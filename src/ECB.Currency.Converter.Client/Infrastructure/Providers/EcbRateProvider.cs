@@ -53,7 +53,7 @@ namespace ECB.Currency.Converter.Client.Infrastructure.Providers
                 _cacheLock.Release();
             }
 
-            var fetchResult = await FetchAndParseEcbDataAsync();
+            Result<IEnumerable<ExchangeRateEntity>> fetchResult = await FetchAndParseEcbDataAsync();
 
             if (fetchResult.IsFailure)
                 return Result<IEnumerable<ExchangeRateEntity>>.Failure(fetchResult.Error);
@@ -101,21 +101,21 @@ namespace ECB.Currency.Converter.Client.Infrastructure.Providers
                 XNamespace gesmes = "http://www.gesmes.org/xml/2002-08-01";
                 XNamespace ecb = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref";
 
-                var dailyCube = xmlDoc.Descendants(ecb + "Cube")
+                XElement? dailyCube = xmlDoc.Descendants(ecb + "Cube")
                                     .FirstOrDefault(c => c.Attribute("time") != null);
 
                 if (dailyCube is null)
                     return Result<IEnumerable<ExchangeRateEntity>>.Failure(XmlParsingError);
 
-                if (!DateTimeOffset.TryParse(dailyCube.Attribute("time")?.Value, out var rateTimestamp))
+                if (!DateTimeOffset.TryParse(dailyCube.Attribute("time")?.Value, out DateTimeOffset rateTimestamp))
                     rateTimestamp = DateTimeOffset.UtcNow.Date;
 
                 List<ExchangeRateEntity> parsedRates = [];
 
-                foreach (var rateCube in dailyCube.Elements(ecb + "Cube"))
+                foreach (XElement rateCube in dailyCube.Elements(ecb + "Cube"))
                 {
-                    string? currencyCode = rateCube.Attribute("Currency")?.Value;
-                    string? rateValueStr = rateCube.Attribute("rate")?.Value;
+                    string? currencyCode = rateCube.FirstAttribute?.Value;
+                    string? rateValueStr = rateCube.LastAttribute?.Value;
 
                     if (string.IsNullOrWhiteSpace(currencyCode) || string.IsNullOrWhiteSpace(rateValueStr))
                     {

@@ -13,7 +13,7 @@ namespace ECB.Currency.Converter.Tests.Common
             string message = "Something went wrong";
 
             // Act
-            var error = Error.Create(code, message);
+            Error error = Error.Create(code, message);
 
             // Assert
             error.Code.Should().Be(code);

@@ -129,7 +129,7 @@ namespace ECB.Currency.Converter.Tests.Common
         {
             Result<string> result = Result<string>.Failure(CustomError);
 
-            var output = result.Match(
+            string output = result.Match(
                 onSuccess: s => s.ToUpper(),
                 onFailure: e => e.Code
             );
