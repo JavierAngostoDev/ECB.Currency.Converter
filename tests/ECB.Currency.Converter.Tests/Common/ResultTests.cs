@@ -188,5 +188,45 @@ namespace ECB.Currency.Converter.Tests.Common
             result.Value.Should().Be("ok");
             result.Error.Should().Be(Error.None);
         }
+
+        [Fact]
+        public void Match_When_Success_Should_Invoke_OnSuccess_Action()
+        {
+            // Arrange
+            Result<string> result = Result<string>.Success("hello");
+            string capturedValue = string.Empty;
+            bool failureInvoked = false;
+
+            // Act
+            result.Match(
+                onSuccess: value => capturedValue = value,
+                onFailure: error => failureInvoked = true
+            );
+
+            // Assert
+            capturedValue.Should().Be("hello");
+            failureInvoked.Should().BeFalse();
+        }
+
+        [Fact]
+        public void Match_When_Failure_Should_Invoke_OnFailure_Action()
+        {
+            // Arrange
+            Error customError = Error.Create("E01", "fail");
+            Result<string> result = Result<string>.Failure(customError);
+            bool successInvoked = false;
+            string capturedCode = string.Empty;
+
+            // Act
+            result.Match(
+                onSuccess: value => successInvoked = true,
+                onFailure: error => capturedCode = error.Code
+            );
+
+            // Assert
+            capturedCode.Should().Be("E01");
+            successInvoked.Should().BeFalse();
+        }
+
     }
 }
