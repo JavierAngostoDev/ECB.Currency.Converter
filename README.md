@@ -1,6 +1,6 @@
 ﻿# ECB.Currency.Converter 💱
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![codecov](https://codecov.io/gh/JavierAngostoDev/ECB.Currency.Converter/graph/badge.svg?token=C98ZKS3G2R)](https://codecov.io/gh/JavierAngostoDev/ECB.Currency.Converter)
 
 **ECB.Currency.Converter** is a lightweight, reliable, and easy-to-use library for converting currencies using the official daily exchange rates published by the European Central Bank (ECB). Ideal for .NET applications that need to handle currencies without relying on paid services or API keys.
 
