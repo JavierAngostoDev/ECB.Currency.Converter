@@ -2,6 +2,7 @@
 using ECB.Currency.Converter.Core.Domain;
 using ECB.Currency.Converter.Core.Features.GetExchangeRate;
 using ECB.Currency.Converter.Core.Interfaces;
+using FluentAssertions;
 using Moq;
 
 namespace ECB.Currency.Converter.Tests.Features.GetExchangeRate
@@ -26,15 +27,16 @@ namespace ECB.Currency.Converter.Tests.Features.GetExchangeRate
         public void Constructor_WhenRateProviderIsNull_ThrowsArgumentNullException()
         {
             IExchangeRateProvider? nullProvider = null;
-            Assert.Throws<ArgumentNullException>(() => new GetExchangeRateQueryHandler(nullProvider));
+            Action act = () => new GetExchangeRateQueryHandler(nullProvider);
+            act.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public void Constructor_WhenRateProviderIsValid_DoesNotThrow()
         {
+            _handler.Should().NotBeNull();
             GetExchangeRateQueryHandler instance = new GetExchangeRateQueryHandler(_mockRateProvider.Object);
-            Assert.NotNull(instance);
-            Assert.NotNull(_handler);
+            instance.Should().NotBeNull();
         }
 
         [Fact]
@@ -59,11 +61,11 @@ namespace ECB.Currency.Converter.Tests.Features.GetExchangeRate
 
             decimal expectedCrossRate = gbpRateVsEur / usdRateVsEur;
 
-            Assert.True(result.IsSuccess);
-            Assert.Equal(Usd, result.Value.BaseCurrency);
-            Assert.Equal(Gbp, result.Value.QuoteCurrency);
-            Assert.Equal(expectedCrossRate, result.Value.Rate);
-            Assert.Equal(rateTimestamp, result.Value.Timestamp);
+            result.IsSuccess.Should().BeTrue();
+            result.Value.BaseCurrency.Should().Be(Usd);
+            result.Value.QuoteCurrency.Should().Be(Gbp);
+            result.Value.Rate.Should().Be(expectedCrossRate);
+            result.Value.Timestamp.Should().Be(rateTimestamp);
 
             _mockRateProvider.Verify(p => p.GetLatestRatesAsync(), Times.Once);
         }
@@ -82,15 +84,15 @@ namespace ECB.Currency.Converter.Tests.Features.GetExchangeRate
             };
 
             _mockRateProvider.Setup(p => p.GetLatestRatesAsync())
-                            .ReturnsAsync(Result<IEnumerable<ExchangeRateEntity>>.Success(rates));
+                             .ReturnsAsync(Result<IEnumerable<ExchangeRateEntity>>.Success(rates));
 
             Result<ExchangeRateEntity> result = await _handler.Handle(query);
 
-            Assert.True(result.IsSuccess);
-            Assert.Equal(Eur, result.Value.BaseCurrency);
-            Assert.Equal(Usd, result.Value.QuoteCurrency);
-            Assert.Equal(usdRateVsEur, result.Value.Rate);
-            Assert.Equal(rateTimestamp, result.Value.Timestamp);
+            result.IsSuccess.Should().BeTrue();
+            result.Value.BaseCurrency.Should().Be(Eur);
+            result.Value.QuoteCurrency.Should().Be(Usd);
+            result.Value.Rate.Should().Be(usdRateVsEur);
+            result.Value.Timestamp.Should().Be(rateTimestamp);
 
             _mockRateProvider.Verify(p => p.GetLatestRatesAsync(), Times.Once);
         }
@@ -109,15 +111,15 @@ namespace ECB.Currency.Converter.Tests.Features.GetExchangeRate
             };
 
             _mockRateProvider.Setup(p => p.GetLatestRatesAsync())
-                            .ReturnsAsync(Result<IEnumerable<ExchangeRateEntity>>.Success(rates));
+                             .ReturnsAsync(Result<IEnumerable<ExchangeRateEntity>>.Success(rates));
 
             Result<ExchangeRateEntity> result = await _handler.Handle(query);
 
-            Assert.True(result.IsSuccess);
-            Assert.Equal(Usd, result.Value.BaseCurrency);
-            Assert.Equal(Eur, result.Value.QuoteCurrency);
-            Assert.Equal(1.0m / usdRateVsEur, result.Value.Rate);
-            Assert.Equal(rateTimestamp, result.Value.Timestamp);
+            result.IsSuccess.Should().BeTrue();
+            result.Value.BaseCurrency.Should().Be(Usd);
+            result.Value.QuoteCurrency.Should().Be(Eur);
+            result.Value.Rate.Should().Be(1.0m / usdRateVsEur);
+            result.Value.Timestamp.Should().Be(rateTimestamp);
 
             _mockRateProvider.Verify(p => p.GetLatestRatesAsync(), Times.Once);
         }
@@ -132,11 +134,11 @@ namespace ECB.Currency.Converter.Tests.Features.GetExchangeRate
 
             Result<ExchangeRateEntity> result = await _handler.Handle(query);
 
-            Assert.True(result.IsSuccess);
-            Assert.Equal(Usd, result.Value.BaseCurrency);
-            Assert.Equal(Usd, result.Value.QuoteCurrency);
-            Assert.Equal(1.0m, result.Value.Rate);
-            Assert.Equal(expectedTimestamp, result.Value.Timestamp);
+            result.IsSuccess.Should().BeTrue();
+            result.Value.BaseCurrency.Should().Be(Usd);
+            result.Value.QuoteCurrency.Should().Be(Usd);
+            result.Value.Rate.Should().Be(1.0m);
+            result.Value.Timestamp.Should().Be(expectedTimestamp);
 
             _mockRateProvider.Verify(p => p.GetLastUpdateTimestamp(), Times.Once);
             _mockRateProvider.Verify(p => p.GetLatestRatesAsync(), Times.Never);
@@ -153,11 +155,12 @@ namespace ECB.Currency.Converter.Tests.Features.GetExchangeRate
             Result<ExchangeRateEntity> result = await _handler.Handle(query);
             DateTimeOffset afterExecution = DateTimeOffset.UtcNow;
 
-            Assert.True(result.IsSuccess);
-            Assert.Equal(Gbp, result.Value.BaseCurrency);
-            Assert.Equal(Gbp, result.Value.QuoteCurrency);
-            Assert.Equal(1.0m, result.Value.Rate);
-            Assert.InRange(result.Value.Timestamp, beforeExecution, afterExecution);
+            result.IsSuccess.Should().BeTrue();
+            result.Value.BaseCurrency.Should().Be(Gbp);
+            result.Value.QuoteCurrency.Should().Be(Gbp);
+            result.Value.Rate.Should().Be(1.0m);
+            result.Value.Timestamp.Should().BeOnOrAfter(beforeExecution);
+            result.Value.Timestamp.Should().BeOnOrBefore(afterExecution);
 
             _mockRateProvider.Verify(p => p.GetLastUpdateTimestamp(), Times.Once);
             _mockRateProvider.Verify(p => p.GetLatestRatesAsync(), Times.Never);
@@ -179,9 +182,10 @@ namespace ECB.Currency.Converter.Tests.Features.GetExchangeRate
 
             Result<ExchangeRateEntity> result = await _handler.Handle(query);
 
-            Assert.False(result.IsSuccess);
-            Assert.Equal(GetExchangeRateQueryHandler.RateNotFound.Code, result.Error.Code);
-            Assert.Contains(Jpy.Code, result.Error.Message);
+            result.IsSuccess.Should().BeFalse();
+            result.Error.Should().NotBeNull();
+            result.Error.Code.Should().Be(GetExchangeRateQueryHandler.RateNotFound.Code);
+            result.Error.Message.Should().Contain(Jpy.Code);
 
             _mockRateProvider.Verify(p => p.GetLatestRatesAsync(), Times.Once);
         }
