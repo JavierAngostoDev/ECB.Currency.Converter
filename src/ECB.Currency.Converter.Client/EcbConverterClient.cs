@@ -56,8 +56,6 @@ namespace ECB.Currency.Converter.Client
                 return Result<MoneyEntity>.Failure(toResult.Error);
 
             Result<MoneyEntity> sourceMoneyResult = MoneyEntity.Create(amount, fromResult.Value);
-            if (sourceMoneyResult.IsFailure)
-                return Result<MoneyEntity>.Failure(sourceMoneyResult.Error);
 
             ConvertAmountCommand command = new(sourceMoneyResult.Value, toResult.Value);
             return await _convertAmountHandler.Handle(command);

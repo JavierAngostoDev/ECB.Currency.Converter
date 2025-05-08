@@ -142,9 +142,6 @@ namespace ECB.Currency.Converter.Client.Infrastructure.Providers
                         timestamp: rateTimestamp
                     );
 
-                    if (rateResult.IsFailure)
-                        return Result<IEnumerable<ExchangeRateEntity>>.Failure(rateResult.Error);
-
                     parsedRates.Add(rateResult.Value);
                 }
 
