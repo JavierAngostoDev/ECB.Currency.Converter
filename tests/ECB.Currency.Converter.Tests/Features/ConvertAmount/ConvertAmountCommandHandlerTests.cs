@@ -145,6 +145,7 @@ namespace ECB.Currency.Converter.Tests.Features.ConvertAmount
         [Fact]
         public async Task Handle_ShouldHandleConversionToEurCorrectly()
         {
+            // Arrange
             Result<MoneyEntity> sourceMoneyResult = MoneyEntity.Create(110m, _usd);
             sourceMoneyResult.IsSuccess.Should().BeTrue();
             CurrencyEntity targetCurrency = _eur;
@@ -157,22 +158,23 @@ namespace ECB.Currency.Converter.Tests.Features.ConvertAmount
             ];
 
             _mockRateProvider
-               .Setup(p => p.GetLatestRatesAsync())
-               .ReturnsAsync(Result<IEnumerable<ExchangeRateEntity>>.Success(ratesList));
+                .Setup(p => p.GetLatestRatesAsync())
+                .ReturnsAsync(Result<IEnumerable<ExchangeRateEntity>>.Success(ratesList));
             _mockRateProvider
-              .Setup(p => p.GetLastUpdateTimestamp())
-              .Returns(timestamp);
+                .Setup(p => p.GetLastUpdateTimestamp())
+                .Returns(timestamp);
 
-            decimal expectedRate = 1m / 1.1m;
-            decimal expectedAmount = 110m * expectedRate;
-            Result<MoneyEntity> expectedMoneyResult = MoneyEntity.Create(expectedAmount, targetCurrency);
-            expectedMoneyResult.IsSuccess.Should().BeTrue();
+            decimal rawRate = 1m / 1.1m;
+            decimal rawAmount = 110m * rawRate;
+            decimal expectedAmount = Math.Round(rawAmount, 2, MidpointRounding.AwayFromZero);
 
+            // Act
             Result<MoneyEntity> result = await _handler.Handle(command);
 
+            // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.Currency.Should().Be(targetCurrency);
-            result.Value.Amount.Should().BeApproximately(100m, 0.0001m);
+            result.Value.Amount.Should().Be(expectedAmount); 
         }
 
         [Fact]

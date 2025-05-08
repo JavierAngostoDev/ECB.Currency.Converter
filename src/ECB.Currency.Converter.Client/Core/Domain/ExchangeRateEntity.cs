@@ -16,7 +16,7 @@ namespace ECB.Currency.Converter.Client.Core.Domain
         {
             BaseCurrency = baseCurrency;
             QuoteCurrency = quoteCurrency;
-            Rate = Math.Round(rate, 2, MidpointRounding.AwayFromZero);
+            Rate = rate;
             Timestamp = timestamp;
         }
 
