@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageId>ECB.Currency.Converter</PackageId>
-		<Version>1.0.4</Version>
+		<Version>1.0.5</Version>
 		<Authors>Javier Angosto Barjollo</Authors>
 		<Company>Independent</Company>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -17,7 +17,7 @@
 		<RepositoryUrl>https://github.com/JavierAngostoDev/ECB.Currency.Converter</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReleaseNotes>
-			**Release (v1.0.4)** 🎉
+			**Release (v1.0.5)** 🎉
 
 			Provides a simple and reliable way to perform currency conversions and retrieve daily exchange rates using the official feed from the European Central Bank (ECB).
 
