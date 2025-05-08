@@ -124,5 +124,20 @@ namespace ECB.Currency.Converter.Tests.Client
 
             result.Should().Be(expected);
         }
+
+        [Fact]
+        public async Task GetExchangeRateAsync_Should_Fail_When_ToCurrency_IsInvalid()
+        {
+            // Arrange
+            EcbConverterClient client = new EcbConverterClient(Mock.Of<IExchangeRateProvider>());
+
+            // Act
+            Result<ExchangeRateEntity> result = await client.GetExchangeRateAsync("EUR", "INVALID");
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Code.Should().Be("Currency.Validation");
+        }
+
     }
 }
