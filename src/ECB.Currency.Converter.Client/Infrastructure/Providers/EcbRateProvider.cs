@@ -114,8 +114,8 @@ namespace ECB.Currency.Converter.Client.Infrastructure.Providers
 
                 foreach (XElement rateCube in dailyCube.Elements(ecb + "Cube"))
                 {
-                    string? currencyCode = rateCube.FirstAttribute?.Value;
-                    string? rateValueStr = rateCube.LastAttribute?.Value;
+                    string? currencyCode = rateCube.Attribute("currency")?.Value ?? rateCube.Attribute("Currency")?.Value;
+                    string? rateValueStr = rateCube.Attribute("rate")?.Value ?? rateCube.Attribute("Rate")?.Value;
 
                     if (string.IsNullOrWhiteSpace(currencyCode) || string.IsNullOrWhiteSpace(rateValueStr))
                     {
