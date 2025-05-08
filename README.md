@@ -69,7 +69,7 @@ EcbConverterClient client = new EcbConverterClient();
 Result<ExchangeRateEntity> rateResult = await client.GetExchangeRateAsync("USD", "EUR");
 
 if (rateResult.IsSuccess)
-    Console.WriteLine($"Rate: {rateResult.Value.Rate} (Date: {rateResult.Value.Timestamp:yyyy-MM-dd})");
+    Console.WriteLine($"1 {rateResult.Value.BaseCurrency} = {rateResult.Value.Rate} {rateResult.Value.QuoteCurrency}  (Date: {rateResult.Value.Timestamp:yyyy-MM-dd})");
 else
     Console.WriteLine($"Error: {rateResult.Error.Code} - {rateResult.Error.Message}");
 ```
